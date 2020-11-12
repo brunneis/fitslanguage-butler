@@ -2,6 +2,11 @@ from requests import Session
 import lxml.html
 import yaml
 import datetime
+import logging
+
+logging.getLogger().setLevel(logging.INFO)
+logging.basicConfig(format='%(asctime)-15s [%(levelname)s] %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
 
 with open('config.yaml', 'r') as input_file:
     config = yaml.safe_load(input_file)
@@ -23,7 +28,7 @@ session.post('https://www.fitslanguage.com/login',
              data=f"email={config['email']}&pass={config['password']}&entrar=Iniciar sesión")
 
 for day in days:
-    print(f'Checking {day}...')
+    logging.info(f'Checking {day}...')
 
     response = session.post('https://www.fitslanguage.com/lessons/search',
                             data=f'day={day}&search=Buscar')
@@ -57,7 +62,7 @@ for day in days:
                 if slot_message.lower() == 'reservar':
                     if slot_time in config['slots']:
                         class_id = class_ids[class_id_index]
-                        print(
+                        logging.info(
                             f'[BOOKING] [{day} {slot_time}] https://www.fitslanguage.com/lessons/view/{class_id}'
                         )
                         session.post('https://www.fitslanguage.com/lessons/book',
