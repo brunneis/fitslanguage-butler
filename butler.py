@@ -15,7 +15,7 @@ start_date = datetime.datetime.today()
 delta = datetime.timedelta(days=1)
 current_date = start_date + delta
 days = []
-for _ in range(31):
+for _ in range(40):
     days.append(f'{current_date.year}-{current_date.month}-{current_date.day}')
     current_date += delta
 
