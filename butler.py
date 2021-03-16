@@ -45,11 +45,7 @@ for day in days:
                     for element in card_element.xpath("./table/tbody/tr/td[1]/text()")
                 ]))
 
-            slot_messages = list(
-                filter(lambda x: x, [
-                    element.strip()
-                    for element in card_element.xpath("./table/tbody/tr/td[2]//text()")
-                ]))
+            slot_message_cells = card_element.xpath("./table/tbody/tr/td[2]")
 
             class_ids = [
                 class_id
@@ -58,7 +54,11 @@ for day in days:
 
             class_id_index = 0
             for i, slot_time in enumerate(slot_times):
-                slot_message = slot_messages[i]
+                try:
+                    slot_message = ''.join(slot_message_cells[i].xpath('.//text()')).strip()
+                except IndexError:
+                    continue
+
                 if slot_message.lower() == 'reservar':
                     if slot_time in config['slots']:
                         class_id = class_ids[class_id_index]
